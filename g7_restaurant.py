@@ -317,117 +317,117 @@ class Restaurant:  # Main class that manages menu and orders.
 
     
     # ADD DEMO ITEM
-
-    def add_demo_item(self, item_code, name, price, category):  # Add an item automatically.
-
-        if category == "Food": item = FoodItem(item_code, name, price)  # Create food item.
-        elif category == "Drink": item = DrinkItem(item_code, name, price)  # Create drink item.
-        elif category == "Dessert": item = DessertItem(item_code, name, price)  # Create dessert item.
-        else: return  # Stop if the category is invalid.
-
-        self.menu.append(item)  # Add item to menu.
-        print(f"Added: {item_code} - {name} (UGX {price:,.0f})")  # Show added item.
-
     
-    # VIEW MENU
-
-    def view_menu(self):  # Display the restaurant menu.
-
-        print("\n========== RESTAURANT MENU ==========")  # Display heading.
-
-        if len(self.menu) == 0:  # Check if menu is empty.
-            print("No menu items available.")  # Show empty menu message.
-            return  # Stop the method.
-
-        for number, item in enumerate(self.menu, 1):  # Number menu items.
-            print(f"{number}. ", end="")  # Display item number.
-            item.show()  # Display item information.
-
-   
-    # SEARCH MENU
-
-    def search_menu(self, search_term):  # Search for an item by name.
-
-        print("\n========== MENU SEARCH ==========")  # Display heading.
-        found = False  # Assume nothing has been found.
-
-        for item in self.menu:  # Go through menu items.
-            if search_term.lower() in item.name.lower():  # Check if the name matches.
-                item.show()  # Display matching item.
-                found = True  # Mark that an item was found.
-
-        if not found:  # Check if no item was found.
-            print("No matching menu item found.")  # Show no-result message.
-
+        def add_demo_item(self, item_code, name, price, category):  # Add an item automatically.
     
-    # CREATE ORDER
-
-    def create_order(self):  # Create a new customer order.
-
-        order = Order()  # Create a new Order object.
-        self.orders.append(order)  # Add the order to the restaurant.
-        print(f"\nOrder #{order.order_id} created successfully.")  # Confirm the order.
-        return order  # Return the new order.
-
+            if category == "Food": item = FoodItem(item_code, name, price)  # Create food item.
+            elif category == "Drink": item = DrinkItem(item_code, name, price)  # Create drink item.
+            elif category == "Dessert": item = DessertItem(item_code, name, price)  # Create dessert item.
+            else: return  # Stop if the category is invalid.
     
-    # FIND ORDER
-
-    def find_order(self, order_id):  # Find an order using its ID.
-
-        for order in self.orders:  # Search through all orders.
-            if order.order_id == order_id:  # Check the order ID.
-                return order  # Return the matching order.
-
-        return None  # Return nothing if not found.
-
+            self.menu.append(item)  # Add item to menu.
+            print(f"Added: {item_code} - {name} (UGX {price:,.0f})")  # Show added item.
     
-    # ACTIVE ORDERS
-
-    def active_orders(self):  # Display active orders.
-
-        print("\n========== ACTIVE ORDERS ==========")  # Display heading.
-        found = False  # Assume there are no active orders.
-
-        for order in self.orders:  # Go through all orders.
-            if order.status == "Active":  # Check for active orders.
-                order.show()  # Display the order.
-                found = True  # Mark that an order was found.
-
-        if not found:  # Check if no active orders were found.
-            print("No active orders.")  # Show message.
-
+        
+        # VIEW MENU
     
-    # COMPLETED ORDERS
-
-    def completed_orders(self):  # Display completed orders.
-
-        print("\n========== COMPLETED ORDERS ==========")  # Display heading.
-        found = False  # Assume there are no completed orders.
-
-        for order in self.orders:  # Go through all orders.
-            if order.status == "Completed":  # Check for completed orders.
-                order.show()  # Display the order.
-                found = True  # Mark that an order was found.
-
-        if not found:  # Check if none were found.
-            print("No completed orders.")  # Show message.
-
+        def view_menu(self):  # Display the restaurant menu.
     
-    # CANCELLED ORDERS
-
-    def cancelled_orders(self):  # Display cancelled orders.
-
-        print("\n========== CANCELLED ORDERS ==========")  # Display heading.
-        found = False  # Assume there are no cancelled orders.
-
-        for order in self.orders:  # Go through all orders.
-            if order.status == "Cancelled":  # Check for cancelled orders.
-                order.show()  # Display the order.
-                found = True  # Mark that an order was found.
-
-        if not found:  # Check if no cancelled orders were found.
-            print("No cancelled orders.")  # Show message.
-
+            print("\n========== RESTAURANT MENU ==========")  # Display heading.
+    
+            if len(self.menu) == 0:  # Check if menu is empty.
+                print("No menu items available.")  # Show empty menu message.
+                return  # Stop the method.
+    
+            for number, item in enumerate(self.menu, 1):  # Number menu items.
+                print(f"{number}. ", end="")  # Display item number.
+                item.show()  # Display item information.
+    
+       
+        # SEARCH MENU
+    
+        def search_menu(self, search_term):  # Search for an item by name.
+    
+            print("\n========== MENU SEARCH ==========")  # Display heading.
+            found = False  # Assume nothing has been found.
+    
+            for item in self.menu:  # Go through menu items.
+                if search_term.lower() in item.name.lower():  # Check if the name matches.
+                    item.show()  # Display matching item.
+                    found = True  # Mark that an item was found.
+    
+            if not found:  # Check if no item was found.
+                print("No matching menu item found.")  # Show no-result message.
+    
+        
+        # CREATE ORDER
+    
+        def create_order(self):  # Create a new customer order.
+    
+            order = Order()  # Create a new Order object.
+            self.orders.append(order)  # Add the order to the restaurant.
+            print(f"\nOrder #{order.order_id} created successfully.")  # Confirm the order.
+            return order  # Return the new order.
+    
+        
+        # FIND ORDER
+    
+        def find_order(self, order_id):  # Find an order using its ID.
+    
+            for order in self.orders:  # Search through all orders.
+                if order.order_id == order_id:  # Check the order ID.
+                    return order  # Return the matching order.
+    
+            return None  # Return nothing if not found.
+    
+        
+        # ACTIVE ORDERS
+    
+        def active_orders(self):  # Display active orders.
+    
+            print("\n========== ACTIVE ORDERS ==========")  # Display heading.
+            found = False  # Assume there are no active orders.
+    
+            for order in self.orders:  # Go through all orders.
+                if order.status == "Active":  # Check for active orders.
+                    order.show()  # Display the order.
+                    found = True  # Mark that an order was found.
+    
+            if not found:  # Check if no active orders were found.
+                print("No active orders.")  # Show message.
+    
+        
+        # COMPLETED ORDERS
+    
+        def completed_orders(self):  # Display completed orders.
+    
+            print("\n========== COMPLETED ORDERS ==========")  # Display heading.
+            found = False  # Assume there are no completed orders.
+    
+            for order in self.orders:  # Go through all orders.
+                if order.status == "Completed":  # Check for completed orders.
+                    order.show()  # Display the order.
+                    found = True  # Mark that an order was found.
+    
+            if not found:  # Check if none were found.
+                print("No completed orders.")  # Show message.
+    
+        
+        # CANCELLED ORDERS
+    
+        def cancelled_orders(self):  # Display cancelled orders.
+    
+            print("\n========== CANCELLED ORDERS ==========")  # Display heading.
+            found = False  # Assume there are no cancelled orders.
+    
+            for order in self.orders:  # Go through all orders.
+                if order.status == "Cancelled":  # Check for cancelled orders.
+                    order.show()  # Display the order.
+                    found = True  # Mark that an order was found.
+    
+            if not found:  # Check if no cancelled orders were found.
+                print("No cancelled orders.")  # Show message.
+    
     
     # DAILY SUMMARY
 
