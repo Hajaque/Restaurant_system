@@ -22,21 +22,36 @@ from datetime import datetime  # Import datetime to record order creation time.
 
 class MenuItem(ABC):  # Parent class for all menu items.
 
-    def __init__(self, item_code, name, price):  # Create a menu item.
-        self.item_code = item_code  # Store the item code.
-        self.name = name  # Store the item name.
-        self.price = price  # Store the item price.
+    def __init__(self, item_code, name, price):
+        self.item_code = item_code      # Public attribute
+        self.name = name                # Public attribute
+        self.__price = price            # Private attribute:  # ENCAPSULATION: controlled access to the private __price.
+
+    
+    @property # The property allows the rest of the program to use price safely without directly accessing __price.
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, value):
+        if value < 0:
+            raise ValueError("Price cannot be negative.")
+        self.__price = value
 
     @abstractmethod
-    def calculate_price(self, quantity):  # Calculate the price.
-        pass  # Subclasses must provide the calculation.
+    def calculate_price(self, quantity): # POLYMORPHISM: This method has the same name in the parent class, but each child class provides its own implementation.
+        pass
 
     @abstractmethod
-    def prepare(self):  # Describe how the item is prepared.
-        pass  # Subclasses must provide preparation details.
+    def prepare(self):
+        pass
 
-    def show(self):  # Display basic item information.
+    def show(self):
         print(f"Code: {self.item_code} | Name: {self.name} | Price: UGX {self.price:,.2f}")
+
+
+
+
 
 
 # FOOD ITEM
@@ -78,15 +93,32 @@ class DessertItem(MenuItem):  # DessertItem inherits from MenuItem.
 
 class OrderItem:  # Represents one item inside an order.
 
-    def __init__(self, menu_item, quantity):  # Create an order item.
-        self.menu_item = menu_item  # Store the menu item.
-        self.quantity = quantity  # Store the quantity.
+    def __init__(self, menu_item, quantity):
+        self.menu_item = menu_item  # Public attribute.
+        self.quantity = quantity  # Use the setter so validation is applied.
 
-    def calculate_total(self):  # Calculate the total for this item.
-        return self.menu_item.calculate_price(self.quantity)  # Use the item's price calculation.
+    @property
+    def quantity(self):  
+        return self.__quantity
 
-    def show(self, number):  # Display the ordered item.
-        print(f"{number}. {self.menu_item.name} | Quantity: {self.quantity} | Total: UGX {self.calculate_total():,.2f}")
+    @quantity.setter
+    def quantity(self, value):
+        if value <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+        self.__quantity = value
+
+    def calculate_total(self): # POLYMORPHISM: The correct calculate_price() method is selected according to the actual type of menu_item.
+        return self.menu_item.calculate_price(self.quantity)
+
+    def show(self, number):
+        print(
+            f"{number}. {self.menu_item.name} | Quantity: {self.quantity} | "
+            f"Total: UGX {self.calculate_total():,.2f}"
+        )
+
+
+
+
 
 
 # CUSTOMER ORDER CLASS
@@ -99,10 +131,23 @@ class Order:  # Represents a customer's order.
         self.order_id = Order.next_order_id  # Give the order an ID.
         Order.next_order_id += 1  # Increase the next order ID.
         self.items = []  # Create an empty list for order items.
-        self.status = "Active"  # New orders start as Active.
+
+        self.status = "Active"  # Set status through the encapsulated property.
+
         self.created_at = datetime.now()  # Record the current date and time.
 
     
+    @property
+    def status(self): # ENCAPSULATION: provide controlled access to the order status.
+        return self.__status
+
+    @status.setter
+    def status(self, value): # ENCAPSULATION: only accepted order states are allowed.
+        allowed_statuses = ("Active", "Completed", "Cancelled")
+        if value not in allowed_statuses:
+            raise ValueError("Invalid order status.")
+        self.__status = value
+
     # ADD ITEM
 
     def add_item(self, menu_item, quantity):  # Add an item to the order.
@@ -343,7 +388,7 @@ class Restaurant:  # Main class that manages menu and orders.
             print(f"{number}. ", end="")  # Display item number.
             item.show()  # Display item information.
 
-
+   
     # SEARCH MENU
 
     def search_menu(self, search_term):  # Search for an item by name.
@@ -518,7 +563,16 @@ class Restaurant:  # Main class that manages menu and orders.
         print(f"Subtotal: UGX {subtotal:,.2f}")  # Display subtotal.
         print(f"Total: UGX {total:,.2f}")  # Display total.
 
-        print("\n[TEST 9] TESTING POLYMORPHIC PREPARATION")  # Show test heading.
+        # Parent-class encapsulation demonstration:
+        # __price is private, but its value is accessed through the price property.
+        print(f"MenuItem private price accessed through property: UGX {chicken.price:,.2f}")
+
+        print("\n[TEST 9] TESTING ENCAPSULATION AND POLYMORPHISM")
+        print("Encapsulation: OrderItem controls access to quantity through a private attribute and property.")
+        print("Encapsulation: Order controls valid status values through a private attribute and property.")
+        print("Polymorphism: FoodItem, DrinkItem and DessertItem use the same methods differently.")
+        print("Encapsulation: MenuItem.__price, OrderItem.__quantity and Order.__status are private and accessed in a controlled way.")
+        print("Polymorphism: the same methods behave differently for different menu item types.")  # Show test heading.
 
         print(f"{chicken.name}: {chicken.prepare()}")  # Call FoodItem prepare().
         print(f"{fresh_juice.name}: {fresh_juice.prepare()}")  # Call DrinkItem prepare().
@@ -639,6 +693,25 @@ The demonstration tested:
 """)
 
 
+
+# ============================================================
+# OOP CONCEPTS USED IN THIS PROGRAM
+# ============================================================
+# ENCAPSULATION:
+# 1. OrderItem.quantity is stored privately as __quantity.
+#    The @property getter and setter control how quantity is accessed and changed.
+# 2. Order.status is stored privately as __status.
+#    The status property allows only Active, Completed or Cancelled.
+# 3. MenuItem does NOT make every attribute private; item_code, name and price
+#    remain public because encapsulation should be applied where it is useful.
+#
+# POLYMORPHISM:
+# 1. MenuItem defines calculate_price() and prepare() as abstract methods.
+# 2. FoodItem, DrinkItem and DessertItem override these methods with different
+#    behaviours.
+# 3. Therefore, the same method call can produce different results depending
+#    on the type of menu item.
+# ============================================================
 
 # INTERACTIVE FUNCTIONS
 
